@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soaci.springboot.mapper.UserMapper">
+
+    <resultMap id="userMap" type="com.soaci.springboot.entity.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.soaci.springboot.entity.User">
+        insert into user (username, password, name)
+        values(#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="batchInsertUser" useGeneratedKeys="true" keyProperty="id">
+        insert into user (username, password, name) values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.username}, #{item.password},#{item.name})
+        </foreach>
+    </insert>
+
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete from user
+        where id = #{id}
+    </delete>
+
+    <update id="updateUser" parameterType="com.soaci.springboot.entity.User">
+        update user
+        set username = #{username, jdbcType=VARCHAR}, password = #{password, jdbcType=VARCHAR},name=#{name,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectUser" parameterType="java.lang.Integer" resultMap="userMap">
+        select * from user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAllUser" resultMap="userMap">
+        select * from user
+    </select>
+
+</mapper>
